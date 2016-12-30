@@ -4,11 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _htmlBeautifier = require('./lib/html-beautifier');
+var _htmlBeautify = require('./lib/html-beautify');
 
-var _htmlBeautifier2 = _interopRequireDefault(_htmlBeautifier);
+var _htmlBeautify2 = _interopRequireDefault(_htmlBeautify);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _htmlBeautifier2.default;
+exports.default = _htmlBeautify2.default;
 module.exports = exports['default'];
