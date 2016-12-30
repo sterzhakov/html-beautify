@@ -1,0 +1,35 @@
+{
+  "name": "html-beautifier",
+  "version": "1.0.0",
+  "description": "Inserts spaces and line breaks into html string.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jasmine",
+    "build": "babel src --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sterjakovigor/extend-with.git"
+  },
+  "keywords": [
+    "html beautifier",
+    "html parser",
+    "html prettifier"
+  ],
+  "author": "Igor Sterjakov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sterjakovigor/html-beautifier/issues"
+  },
+  "homepage": "https://github.com/sterjakovigor/html-beautifier#readme",
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "babel-register": "^6.16.3",
+    "webpack": "^1.13.2"
+  }
+}
