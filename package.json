@@ -1,5 +1,5 @@
 {
-  "name": "html-beautifier",
+  "name": "html-beautify",
   "version": "1.0.0",
   "description": "Inserts spaces and line breaks into html string.",
   "main": "dist/index.js",
