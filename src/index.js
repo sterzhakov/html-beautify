@@ -1,2 +1,2 @@
-import htmlBeautifier from './lib/html-beautifier'
-export deafult htmlBeautifier
+import htmlBeautify from './lib/html-beautify'
+export default htmlBeautify
