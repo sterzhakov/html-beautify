@@ -17,7 +17,7 @@ Inserts spaces and break lines into html string. It looks like this:
 
 # How to use?
 ```javascript
-import htmlBeautifier from 'html-beautifier'
+import htmlBeautifier from 'html-beautify'
 htmlBeautifier("<div><p>Hello <b>world</b>!</p></div>")
 // => "<div>\n<p>\n Hello <b>world</b>!\n</p>\n</div>"
 ```
