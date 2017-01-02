@@ -1,3 +1,11 @@
+export default (html) => {
+  try {
+    return beautify(html)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const SPACE = '   '
 
 const NEW_LINE = '\n'
@@ -41,6 +49,7 @@ const getTagType = (str) => {
 }
 
 const getFormattedNode = ({ node, spaceCount, newLine }) => {
+  if (spaceCount < 0) spaceCount = 0
   return NEW_LINE.repeat(newLine + 0) + SPACE.repeat(spaceCount) + node
 }
 
@@ -176,7 +185,7 @@ const getNewLineSpacesCount = ({
   }
 }
 
-export default (html) => {
+const beautify = (html) => {
 
   let beautified = ''
 
@@ -189,12 +198,18 @@ export default (html) => {
   let previousTagType = false
 
   const symbols = html.split('')
-
   let index = 0
   for (const symbol of symbols) {
     node += symbol
-    const nextSymbol = symbols[index + 1]
-    const previousSymbol = symbols[index - 1]
+
+    const previousSymbol = (
+      index > 0
+    ) ? symbols[index - 1] : false
+
+    const nextSymbol = (
+      symbols.length - 1 != index
+    ) ? symbols[index + 1] : false
+
     if (html.length == index + 1 || nextSymbol == '<' || symbol == '>') {
       node = node.replace(/\n/g, '')
 

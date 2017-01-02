@@ -8,6 +8,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+exports.default = function (html) {
+  try {
+    return beautify(html);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 var SPACE = '   ';
 
 var NEW_LINE = '\n';
@@ -51,6 +59,7 @@ var getFormattedNode = function getFormattedNode(_ref) {
       spaceCount = _ref.spaceCount,
       newLine = _ref.newLine;
 
+  if (spaceCount < 0) spaceCount = 0;
   return NEW_LINE.repeat(newLine + 0) + SPACE.repeat(spaceCount) + node;
 };
 
@@ -145,7 +154,7 @@ var getNewLineSpacesCount = function getNewLineSpacesCount(_ref4) {
   }
 };
 
-exports.default = function (html) {
+var beautify = function beautify(html) {
 
   var beautified = '';
 
@@ -158,7 +167,6 @@ exports.default = function (html) {
   var previousTagType = false;
 
   var symbols = html.split('');
-
   var index = 0;
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
@@ -169,8 +177,11 @@ exports.default = function (html) {
       var symbol = _step.value;
 
       node += symbol;
-      var nextSymbol = symbols[index + 1];
-      var previousSymbol = symbols[index - 1];
+
+      var previousSymbol = index > 0 ? symbols[index - 1] : false;
+
+      var nextSymbol = symbols.length - 1 != index ? symbols[index + 1] : false;
+
       if (html.length == index + 1 || nextSymbol == '<' || symbol == '>') {
         node = node.replace(/\n/g, '');
 
@@ -254,5 +265,4 @@ exports.default = function (html) {
 
   return beautified;
 };
-
 module.exports = exports['default'];
