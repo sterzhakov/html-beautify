@@ -1,6 +1,6 @@
 {
   "name": "html-beautify",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Inserts spaces and line breaks into html string.",
   "main": "dist/index.js",
   "scripts": {
