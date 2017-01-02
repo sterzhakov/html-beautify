@@ -87,19 +87,24 @@ var isNewLineNode = function isNewLineNode(_ref3) {
   var nodeType = _ref3.nodeType,
       previousNodeType = _ref3.previousNodeType,
       previousTagIsInline = _ref3.previousTagIsInline,
+      previousTagType = _ref3.previousTagType,
       tagInfo = _ref3.tagInfo;
+  var tagIsInline = tagInfo.tagIsInline,
+      tagType = tagInfo.tagType;
 
   if (nodeType == 'comment') {
     return true;
   }
-  if (nodeType == 'tag') {
-    var tagIsInline = tagInfo.tagIsInline;
 
-    return !tagIsInline || tagIsInline && previousNodeType == 'tag' && !previousTagIsInline ? true : false;
-  }
-  if (nodeType == 'text') {
-    return ['tag', 'comment'].indexOf(previousNodeType) > -1 && !previousTagIsInline ? true : false;
-  }
+  if (tagType == 'opened' && !tagIsInline && previousNodeType != false) return true;
+
+  if (tagType == 'closed' && !tagIsInline && (previousTagIsInline || previousNodeType != 'tag' || previousTagType == 'closed' && !previousTagIsInline)) return true;
+
+  if (tagIsInline && nodeType == 'tag' && (previousNodeType == 'tag' && !previousTagIsInline || previousNodeType == 'comment')) return true;
+
+  if (nodeType == 'text' && ['tag', 'comment'].indexOf(previousNodeType) > -1 && !previousTagIsInline) return true;
+
+  return false;
 };
 
 var getNewLineSpacesCount = function getNewLineSpacesCount(_ref4) {
@@ -112,15 +117,17 @@ var getNewLineSpacesCount = function getNewLineSpacesCount(_ref4) {
       level = _ref4.level;
 
   if (nodeType == 'tag') {
-    var _tagIsInline = tagInfo.tagIsInline;
+    var _tagIsInline = tagInfo.tagIsInline,
+        tagType = tagInfo.tagType;
 
-    if (_tagIsInline && previousNodeType == 'tag' && previousTagIsInline == false) {
-      return level + 1;
-    } else if (_tagIsInline && previousNodeType == 'text' || _tagIsInline && previousNodeType == 'tag' && previousTagIsInline) {
-      return 0;
-    } else {
-      return level;
-    }
+
+    if (_tagIsInline && (previousNodeType == 'tag' && previousTagIsInline == false || previousNodeType == 'comment')) return level + 1;
+
+    if (_tagIsInline && previousNodeType == 'text' || _tagIsInline && previousNodeType == 'tag' && previousTagIsInline) return 0;
+
+    if (tagType == 'closed' && previousNodeType == 'tag' && !previousTagIsInline) return 0;
+
+    return level;
   }
   if (nodeType == 'text') {
     if (['tag', 'comment'].indexOf(previousNodeType) > -1 && !previousTagIsInline && previousTagType == 'opened') {
@@ -187,7 +194,8 @@ exports.default = function (html) {
           nodeType: nodeType,
           tagInfo: tagInfo,
           previousNodeType: previousNodeType,
-          previousTagIsInline: previousTagIsInline
+          previousTagIsInline: previousTagIsInline,
+          previousTagType: previousTagType
         });
 
         var spaceCount = getNewLineSpacesCount({
@@ -218,10 +226,12 @@ exports.default = function (html) {
           });
         }
 
-        previousNodeType = nodeInfo.nodeType;
-        if (nodeInfo.nodeType == 'tag') {
-          previousTagType = nodeInfo.tagType;
-          previousTagIsInline = nodeInfo.tagIsInline;
+        if (isNotEmptyString(node)) {
+          previousNodeType = nodeType;
+          if (nodeType == 'tag') {
+            previousTagType = nodeInfo.tagType;
+            previousTagIsInline = nodeInfo.tagIsInline;
+          }
         }
         node = '';
       }

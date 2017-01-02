@@ -72,27 +72,51 @@ const isNewLineNode = ({
   nodeType,
   previousNodeType,
   previousTagIsInline,
+  previousTagType,
   tagInfo,
 }) => {
+  const { tagIsInline, tagType } = tagInfo
   if (nodeType == 'comment') {
     return true
   }
-  if (nodeType == 'tag') {
-    const { tagIsInline } = tagInfo
-    return (
-      !tagIsInline ||
-      tagIsInline &&
+
+  if (
+    tagType == 'opened' &&
+    !tagIsInline &&
+    previousNodeType != false
+  ) return true
+
+  if (
+    tagType == 'closed' &&
+    !tagIsInline &&
+    (
+      previousTagIsInline ||
+      previousNodeType != 'tag' ||
+      previousTagType == 'closed' && !previousTagIsInline
+    )
+  ) return true
+
+  if (
+    tagIsInline &&
+    nodeType == 'tag' &&
+    (
       previousNodeType == 'tag' &&
       !previousTagIsInline
-    ) ? true : false
-  }
-  if (nodeType == 'text') {
-    return (
-       ['tag','comment'].indexOf(previousNodeType) > -1 && !previousTagIsInline
-    ) ? true : false
-  }
+      ||
+      previousNodeType == 'comment'
+    )
+  ) return true
 
+
+  if (
+    nodeType == 'text' &&
+    ['tag','comment'].indexOf(previousNodeType) > -1
+    && !previousTagIsInline
+  ) return true
+
+  return false
 }
+
 
 const getNewLineSpacesCount = ({
   nodeType,
@@ -104,24 +128,34 @@ const getNewLineSpacesCount = ({
   level,
 }) => {
   if (nodeType == 'tag') {
-    const { tagIsInline } = tagInfo
+    const { tagIsInline, tagType } = tagInfo
+
     if (
       tagIsInline &&
-      previousNodeType == 'tag' &&
-      previousTagIsInline == false
-    ) {
-      return level + 1
-    } else if (
+      (
+        previousNodeType == 'tag' &&
+        previousTagIsInline == false
+        ||
+        previousNodeType == 'comment'
+      )
+    ) return level + 1
+
+    if (
       tagIsInline &&
-      previousNodeType == 'text' ||
+      previousNodeType == 'text'
+      ||
       tagIsInline &&
       previousNodeType == 'tag' &&
       previousTagIsInline
-    ) {
-      return 0
-    } else {
-      return level
-    }
+    ) return 0
+
+    if (
+      tagType == 'closed' &&
+      previousNodeType == 'tag' &&
+      !previousTagIsInline
+    ) return 0
+
+    return level
   }
   if (nodeType == 'text') {
     if (
@@ -190,6 +224,7 @@ export default (html) => {
           tagInfo,
           previousNodeType,
           previousTagIsInline,
+          previousTagType,
         })
 
       const spaceCount =
@@ -225,10 +260,12 @@ export default (html) => {
           })
       }
 
-      previousNodeType = nodeInfo.nodeType
-      if (nodeInfo.nodeType == 'tag') {
-        previousTagType = nodeInfo.tagType
-        previousTagIsInline = nodeInfo.tagIsInline
+      if (isNotEmptyString(node)) {
+        previousNodeType = nodeType
+        if (nodeType == 'tag') {
+          previousTagType = nodeInfo.tagType
+          previousTagIsInline = nodeInfo.tagIsInline
+        }
       }
       node = ''
     }
