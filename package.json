@@ -1,20 +1,24 @@
 {
   "name": "html-beautify",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Inserts spaces and line breaks into html string.",
   "main": "dist/index.js",
   "scripts": {
     "test": "jasmine",
-    "build": "babel src --out-dir dist"
+    "build": "babel src --out-dir dist",
+    "dev": "babel --watch src --out-dir dist"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/sterjakovigor/extend-with.git"
   },
   "keywords": [
-    "html beautifier",
-    "html parser",
-    "html prettifier"
+    "html",
+    "beautify",
+    "pareser",
+    "pretty",
+    "beautifier",
+    "prettifier"
   ],
   "author": "Igor Sterjakov",
   "license": "ISC",

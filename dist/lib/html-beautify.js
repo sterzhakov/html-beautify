@@ -36,6 +36,7 @@ var deleteLevelTag = function deleteLevelTag(levelTags, tagName) {
 };
 
 var getNodeType = function getNodeType(str) {
+  if (str.slice(0, 4) == '<!--') return 'comment';
   return str[0] == '<' && str[str.length - 1] == '>' ? 'tag' : 'text';
 };
 
@@ -88,13 +89,16 @@ var isNewLineNode = function isNewLineNode(_ref3) {
       previousTagIsInline = _ref3.previousTagIsInline,
       tagInfo = _ref3.tagInfo;
 
+  if (nodeType == 'comment') {
+    return true;
+  }
   if (nodeType == 'tag') {
     var tagIsInline = tagInfo.tagIsInline;
 
     return !tagIsInline || tagIsInline && previousNodeType == 'tag' && !previousTagIsInline ? true : false;
   }
   if (nodeType == 'text') {
-    return previousNodeType == 'tag' && !previousTagIsInline ? true : false;
+    return ['tag', 'comment'].indexOf(previousNodeType) > -1 && !previousTagIsInline ? true : false;
   }
 };
 
@@ -119,10 +123,17 @@ var getNewLineSpacesCount = function getNewLineSpacesCount(_ref4) {
     }
   }
   if (nodeType == 'text') {
-    if (previousNodeType == 'tag' && !previousTagIsInline && previousTagType == 'opened') {
+    if (['tag', 'comment'].indexOf(previousNodeType) > -1 && !previousTagIsInline && previousTagType == 'opened') {
       return level + 1;
     } else {
       return 0;
+    }
+  }
+  if (nodeType == 'comment') {
+    if (previousNodeType == false) {
+      return level;
+    } else {
+      return level + 1;
     }
   }
 };
