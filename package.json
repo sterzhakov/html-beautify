@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/sterjakovigor/extend-with.git"
+    "url": "git+ssh://git@github.com/sterjakovigor/html-beautify.git"
   },
   "keywords": [
     "html",
@@ -23,9 +23,9 @@
   "author": "Igor Sterjakov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sterjakovigor/html-beautifier/issues"
+    "url": "https://github.com/sterjakovigor/html-beautify/issues"
   },
-  "homepage": "https://github.com/sterjakovigor/html-beautifier#readme",
+  "homepage": "https://github.com/sterjakovigor/html-beautify#readme",
   "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
