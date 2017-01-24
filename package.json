@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/sterjakovigor/extend-with.git"
+    "url": "git+ssh://git@github.com/sterjakovigor/html-beautifier.git"
   },
   "keywords": [
     "html",
